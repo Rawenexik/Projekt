@@ -1,4 +1,4 @@
-# Závěrečný projekt
+# Závěrečný projekt ttttttttttttttttttttttttttt
 Měření teploty pomoci thermistoru,tyto hodnoty se budou zobrazovat na vytvořeném webovém serveru(Home Assistant) skrz MQTT. 
 
 # Součástky
