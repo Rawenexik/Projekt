@@ -9,6 +9,7 @@ Měření teploty pomoci thermistoru,tyto hodnoty se budou zobrazovat na vytvoř
 https://www.electronicwings.com/nodemcu/thermistor-interfacing-with-nodemcu
 https://navody.arduino-shop.cz/arduino-projekty/mereni-teploty-s-termistorem.html
 https://iotdesignpro.com/projects/how-to-connect-esp8266-with-mqtt
+https://www.youtube.com/watch?v=sVqyDtEjudk&ab_channel=TheHookUp
 
 # Pracovní plán
 1. objednání hardwaru - HOTOVO
@@ -18,4 +19,4 @@ https://iotdesignpro.com/projects/how-to-connect-esp8266-with-mqtt
 5. kontrola chyb, popřípadě opravení - NEMAM
 6. dokončení - NEMAM
 
-# Omlouvám se, ale soubory z VScodu,se tady snažím dostat už 2 dny různýma způsobama ale nějak to nejde...
+
