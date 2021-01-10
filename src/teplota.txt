@@ -1,4 +1,8 @@
 #include <Arduino.h>
+#include <NTPClient.h>
+#include <ESP8266WiFi.h>
+#include <WiFiUdp.h>
+#include <PubSubClient.h>
 
 const double VCC = 3.3;             
 const double R2 = 10000;            
@@ -9,22 +13,24 @@ const double B = 0.000234125;
 const double C = 0.0000000876741; 
 
 void setup() {
-  Serial.begin(9600);  
+  
 }
 
+  
+
+
 void loop() {
-  double Vout, Rth, teplota, adc_value; 
+   double Vout, Rth, teplota, adc_value; 
 
   adc_value = analogRead(A0);
   Vout = (adc_value * VCC) / adc_resolution;
   Rth = (VCC * R2 / Vout) - R2;
 
-
   teplota = (1 / (A + (B * log(Rth)) + (C * pow((log(Rth)),3))));   
 
-  teplota= teplota - 273.15;  
+  teplota = teplota - 273.15;  
   Serial.print("Teplota = ");
   Serial.print(teplota);
   Serial.println(" stupnu celsia");
   delay(500);
-}
+} 
