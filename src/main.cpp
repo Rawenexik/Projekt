@@ -1,29 +1,9 @@
-/*
- Basic ESP8266 MQTT example
- This sketch demonstrates the capabilities of the pubsub library in combination
- with the ESP8266 board/library.
- It connects to an MQTT server then:
-  - publishes "hello world" to the topic "outTopic" every two seconds
-  - subscribes to the topic "inTopic", printing out any messages
-    it receives. NB - it assumes the received payloads are strings not binary
-  - If the first character of the topic "inTopic" is an 1, switch ON the ESP Led,
-    else switch it off
- It will reconnect to the server if the connection is lost using a blocking
- reconnect function. See the 'mqtt_reconnect_nonblocking' example for how to
- achieve the same result without blocking the main loop.
- To install the ESP8266 board, (using Arduino 1.6.4+):
-  - Add the following 3rd party board manager under "File -> Preferences -> Additional Boards Manager URLs":
-       http://arduino.esp8266.com/stable/package_esp8266com_index.json
-  - Open the "Tools -> Board -> Board Manager" and click install for the ESP8266"
-  - Select your ESP8266 in "Tools -> Board"
-*/
 
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
 
-// Update these with values suitable for your network.
 
 const char* ssid = "SAO82";
 const char* password = "61122406";
@@ -48,9 +28,9 @@ int value = 0;
 void setup_wifi() {
 
   delay(10);
-  // We start by connecting to a WiFi network
+  // Připojení k WiFi
   Serial.println();
-  Serial.print("Connecting to ");
+  Serial.print("Připojování k ");
   Serial.println(ssid);
 
   WiFi.mode(WIFI_STA);
@@ -64,7 +44,7 @@ void setup_wifi() {
   randomSeed(micros());
 
   Serial.println("");
-  Serial.println("WiFi connected");
+  Serial.println("WiFi připojena");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 }
@@ -78,43 +58,38 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  // Switch on the LED if an 1 was received as first character
+  
   if ((char)payload[0] == '1') {
-    digitalWrite(BUILTIN_LED, LOW);   // Turn the LED on (Note that LOW is the voltage level
-    // but actually the LED is on; this is because
-    // it is active low on the ESP-01)
+    digitalWrite(BUILTIN_LED, LOW);   
   } else {
-    digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
+    digitalWrite(BUILTIN_LED, HIGH);  
   }
 
 }
 
 void reconnect() {
-  // Loop until we're reconnected
+  // Opakování dokud se nepřipojí
   while (!client.connected()) {
-    Serial.print("Attempting MQTT connection...");
-    // Create a random client ID
+    Serial.print("Zkouška připojení k MQTT...");
+    // Vytvoření náhodného ID klienta
     String clientId = "ESP8266Client-";
     clientId += String(random(0xffff), HEX);
-    // Attempt to connect
+    // Pokus o připojení
     if (client.connect(clientId.c_str())) {
-      Serial.println("connected");
-      // Once connected, publish an announcement...
-                                                     // client.publish("zprava", "hello world");
-      // ... and resubscribe
+      Serial.println("připojeno");
       client.subscribe("inTopic");
     } else {
-      Serial.print("failed, rc=");
+      Serial.print("nepřipojeno, rc=");
       Serial.print(client.state());
-      Serial.println(" try again in 5 seconds");
-      // Wait 5 seconds before retrying
+      Serial.println(" zkus znova za 5 sekund");
+      // Čekej 5 sekund na opakování
       delay(5000);
     }
   }
 }
 
 void setup() {
-  pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
+  pinMode(BUILTIN_LED, OUTPUT);     
   Serial.begin(115200);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
@@ -144,7 +119,6 @@ void loop() {
     ++value;
     snprintf (msg, MSG_BUFFER_SIZE, " %lf", teplota);
     Serial.println(teplota);
-    //Serial.println(msg);
     client.publish("/testtopic/teplota", msg);
   }
   delay(500);
