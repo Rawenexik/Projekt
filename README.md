@@ -4,7 +4,7 @@ Měření teploty pomoci thermistoru,tyto hodnoty se budou zobrazovat v grafu na
 # Součástky
 1x ESP8266
 1x Thermistor
-1x Rezistor 10k Ohm
+1x Rezistor 10k 
 
 # Pracovní plán
 1. objednání hardwaru - HOTOVO
