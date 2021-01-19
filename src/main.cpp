@@ -1,19 +1,21 @@
-
+//Potřebné knihovny
 #include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
 
 
+//Přednastavené údaje k Wifi
+const char* ssid = "jmeno";
+const char* password = "heslo";
 
-const char* ssid = "SAO82";
-const char* password = "61122406";
-
-const char* mqtt_server = "192.168.1.115";
+//Přednastavené údaje k MQTT
+const char* mqtt_server = "ip adresa MQTT";
 
 const double VCC = 3.3;             
 const double R2 = 10000;            
 const double adc_resolution = 1023; 
 
+//Potřebné parametry rovnice termistoru
 const double A = 0.001129148;   
 const double B = 0.000234125;
 const double C = 0.0000000876741; 
@@ -45,12 +47,12 @@ void setup_wifi() {
 
   Serial.println("");
   Serial.println("WiFi připojena");
-  Serial.println("IP address: ");
+  Serial.println("IP adresa: ");
   Serial.println(WiFi.localIP());
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
-  Serial.print("Message arrived [");
+  Serial.print("Zpráva příjmuta [");
   Serial.print(topic);
   Serial.print("] ");
   for (int i = 0; i < length; i++) {
@@ -58,7 +60,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
   Serial.println();
 
-  
+  //Ledka
   if ((char)payload[0] == '1') {
     digitalWrite(BUILTIN_LED, LOW);   
   } else {
@@ -98,14 +100,17 @@ void setup() {
 
 void loop() {
 
+  //Převedení napětí na teplotu
   double Vout, Rth, teplota, adc_value; 
 
   adc_value = analogRead(A0);
   Vout = (adc_value * VCC) / adc_resolution;
   Rth = (VCC * R2 / Vout) - R2;
 
+  //Vzorec pro vypočítání
   teplota = (1 / (A + (B * log(Rth)) + (C * pow((log(Rth)),3))));   
 
+  //Převedení z Kelvinu na Celsia
   teplota = teplota - 273.15;  
   
   if (!client.connected()) {
@@ -113,6 +118,7 @@ void loop() {
   }
   client.loop();
 
+  //posílání zpráv na HA
   unsigned long now = millis();
   if (now - lastMsg > 2000) {
     lastMsg = now;
